@@ -287,13 +287,13 @@
 
 			input = document.getElementById('t').value;
 			if (document.getElementById('jsobject').checked) {
-				input = input.replace(/(\r?\n\s+)(\w+)/g, '$1"$2"');
+				input = input.replace(/^(\s+)(\w+)/gm, '$1"$2"');
 				// input = input.replace(/\/\/.*/gm, '');
 			}
 			if (document.getElementById('jsinterface').checked) {
-				input = input.replace(/(\r?\n\s+)(\w+)/g, '$1"$2"');
-				input = input.replace(/\:(\s*\w+[\t ]*;?)[\t ]*([\r\n]*)/g, ':"$1",$2');
-				input = input.replace(/\};[\t ]*([\r\n]*)/g, '},$1');
+				input = input.replace(/^(\s+)(\w+)/gm, '$1"$2"');
+				input = input.replace(/\:(\s*\w+[\t ]*;?)[\t ]*$/gm, ':"$1",');
+				input = input.replace(/\};[\t ]*/gm, '},');
 			}
 			if (input) {
 				try {
@@ -302,13 +302,13 @@
 					r = sortJSON(j);
 					output = JSON.stringify(r, null, 4);
 					if (document.getElementById('jsobject').checked){
-						output = output.replace(/(\r?\n\s+)"(\w+)"/g, '$1$2');
+						output = output.replace(/^(\s+)"(\w+)"/gm, '$1$2');
 					}
 					if (document.getElementById('jsinterface').checked) { 
-						output = output.replace(/\},[\t ]*([\r\n]*)/g, '};$1');
+						output = output.replace(/\},[\t ]*$/gm, '};');
 						output = output.replace(/\: "(.*);?"[\t ]*,/g, ':$1');
 						output = output.replace(/\: "(.*);?"[\t ]*/g, ':$1');
-						output = output.replace(/(\r?\n\s+)"(\w+)"/g, '$1$2');
+						output = output.replace(/(\s+)"(\w+)"/gm, '$1$2');
 					}
 					document.getElementById('t').value = output;
 				} catch (ex) {
